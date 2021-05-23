@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="i453297core.venus.fhict.nl">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/FhictVpnConnect.Console/FhictVpnConnect.Console.csproj" web="/" />
+            <mapping local="$PROJECT_DIR$/FhictVpnConnect.Console/Program.cs" web="/" />
+            <mapping local="$PROJECT_DIR$/FhictVpnConnect.sln" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
