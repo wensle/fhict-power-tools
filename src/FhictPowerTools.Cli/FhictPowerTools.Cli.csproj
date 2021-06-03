@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <AssemblyName>FhictPowerTools.Cli</AssemblyName>
+        <RootNamespace>FhictPowerTools.Cli</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FhictPowerTools.Core\FhictPowerTools.Core.csproj" />
+      <ProjectReference Include="..\FhictPowerTools.Infrastructure\FhictPowerTools.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.6" />
+      <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="5.0.6" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    </ItemGroup>
+
+</Project>
