@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FhictPowerTools.Core.FhictFtp;
+using FhictPowerTools.Core.FtpClient;
 using FhictPowerTools.Core.Repositories;
 using WinSCP;
 
 namespace FhictPowerTools.Infrastructure.FhictFtp
 {
-    public class FhictFtp : IFhictFtp
+    public class FtpClient : IFtpClient
     {
-        private readonly IUserRepository _userRepository;
+        private readonly ICredentialsRepository _credentialsRepository;
 
-        public FhictFtp(IUserRepository userRepository)
+        public FtpClient(ICredentialsRepository credentialsRepository)
         {
-            _userRepository = userRepository;
+            _credentialsRepository = credentialsRepository;
         }
 
-        public void RemoveRemoteFiles()
+        public void DeleteFilesInRemoteDirectory(string remotePath)
         {
             try
             {
@@ -24,13 +24,12 @@ namespace FhictPowerTools.Infrastructure.FhictFtp
                 {
                     Protocol = Protocol.Ftp,
                     HostName = "venus.fhict.nl",
-                    UserName = _userRepository.GetUsername(),
-                    Password = _userRepository.GetPassword(),
+                    UserName = _credentialsRepository.GetUsername(),
+                    Password = _credentialsRepository.GetPassword(),
                     FtpSecure = FtpSecure.Explicit
                 };
                 using Session session = new();
                 session.Open(sessionOptions);
-                const string remotePath = "/domains/i453297.venus.fhict.nl/";
                 List<RemoteFileInfo> remoteFileInfos = session
                     .EnumerateRemoteFiles(remotePath, "*", EnumerationOptions.AllDirectories).ToList();
                 while (remoteFileInfos.Any())
@@ -56,6 +55,11 @@ namespace FhictPowerTools.Infrastructure.FhictFtp
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public IEnumerable<string> ListRemoteFiles()
+        {
+            throw new NotImplementedException();
         }
     }
 }
