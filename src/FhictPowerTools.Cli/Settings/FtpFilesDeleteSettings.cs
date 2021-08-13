@@ -4,7 +4,7 @@ using Spectre.Console.Cli;
 
 namespace FhictPowerTools.Cli.Settings
 {
-    public class FtpFilesDeleteSettings : FtpSettings
+    public class FtpFilesDeleteSettings : FtpFilesSettings
     {
         [CommandArgument(0, "<directory>")]
         public string Path { get; init; }

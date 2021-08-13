@@ -61,7 +61,7 @@ namespace FhictPowerTools.Cli.Tests
                 config.Settings.Registrar.Register<IFtpClient, FtpClientMock>();
                 config.AddBranch<FtpSettings>("ftp", ftp =>
                 {
-                    ftp.AddBranch<FtpSettings>("files", files =>
+                    ftp.AddBranch<FtpFilesSettings>("files", files =>
                     {
                         files.AddCommand<FtpFilesDeleteCommand>("delete");
                     });
