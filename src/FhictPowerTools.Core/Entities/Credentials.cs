@@ -1,6 +1,6 @@
 ﻿namespace FhictPowerTools.Core.Entities
 {
-    public class User
+    public class Credentials
     {
         public string Username { get; set; }
         public string ProtectedPassword { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace FhictPowerTools.Core.Repositories
 {
-    public interface IUserRepository
+    public interface ICredentialsRepository
     {
         string GetUsername();
         string GetPassword();
