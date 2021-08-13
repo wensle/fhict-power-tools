@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FhictPowerTools.Cli\FhictPowerTools.Cli.csproj" />
+      <ProjectReference Include="..\FhictPowerTools.Core\FhictPowerTools.Core.csproj" />
+      <ProjectReference Include="..\FhictPowerTools.Infrastructure\FhictPowerTools.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
