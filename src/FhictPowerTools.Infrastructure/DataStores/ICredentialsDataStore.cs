@@ -2,9 +2,9 @@
 
 namespace FhictPowerTools.Infrastructure.DataStores
 {
-    public interface IUserDataStore
+    public interface ICredentialsDataStore
     {
-        bool Exists();
+        bool Exists { get; }
         void Create();
         JObject Get();
         void Write(JObject userDataStore);

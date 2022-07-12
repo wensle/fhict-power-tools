@@ -2,14 +2,14 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using FhictPowerTools.Core.FhictVpn;
 using FhictPowerTools.Core.Repositories;
+using FhictPowerTools.Core.VpnClient;
 
 namespace FhictPowerTools.Infrastructure.FhictVpn
 {
-    public class FhictVpn : IFhictVpn
+    public class VpnClient : IVpnClient
     {
-        private readonly IUserRepository _userRepository;
+        private readonly ICredentialsRepository _credentialsRepository;
         private ProcessStartInfo CreateCliProcessStartInfo()
         {
             return new()
@@ -23,9 +23,9 @@ namespace FhictPowerTools.Infrastructure.FhictVpn
                 FileName = CliPath
             };
         }
-        public FhictVpn(IUserRepository userRepository)
+        public VpnClient(ICredentialsRepository credentialsRepository)
         {
-            _userRepository = userRepository;
+            _credentialsRepository = credentialsRepository;
             CliPath = @"C:\Program Files (x86)\Cisco\Cisco AnyConnect Secure Mobility Client\vpncli.exe";
             GuiPath = @"C:\Program Files (x86)\Cisco\Cisco AnyConnect Secure Mobility Client\vpnui.exe";
         }
@@ -47,10 +47,11 @@ namespace FhictPowerTools.Infrastructure.FhictVpn
             KillAllCliProcesses();
             ProcessStartInfo cliProcessStartInfo = CreateCliProcessStartInfo();
             cliProcessStartInfo.Arguments = $"-s connect {host}";
+            cliProcessStartInfo.RedirectStandardOutput = true;
             Process process = new() {StartInfo = cliProcessStartInfo};
             process.Start();
-            process.StandardInput.WriteLine(_userRepository.GetUsername());
-            process.StandardInput.WriteLine(_userRepository.GetPassword());
+            process.StandardInput.WriteLine(_credentialsRepository.GetUsername());
+            process.StandardInput.WriteLine(_credentialsRepository.GetPassword());
             process.WaitForExit();
         }
 
@@ -73,7 +74,7 @@ namespace FhictPowerTools.Infrastructure.FhictVpn
             return string.Equals(valueOfGroup1InLastMatch, "Connected", StringComparison.OrdinalIgnoreCase);
         }
 
-        public void KillAllCliProcesses()
+        private static void KillAllCliProcesses()
         {
             Process[] processesByName = Process.GetProcessesByName("vpncli");
             foreach (Process process in processesByName)

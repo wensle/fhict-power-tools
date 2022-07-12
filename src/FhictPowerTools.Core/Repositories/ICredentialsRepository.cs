@@ -6,5 +6,6 @@
         string GetPassword();
         void SetPassword(string password);
         void SetUsername(string username);
+        void DeleteCredentials();
     }
 }

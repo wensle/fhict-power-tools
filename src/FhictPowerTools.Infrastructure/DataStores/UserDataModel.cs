@@ -5,7 +5,7 @@ namespace FhictPowerTools.Infrastructure.DataStores
 {
     public class UserDataModel
     {
-        public User User { get; } = new();
+        public Credentials Credentials { get; } = new();
         public List<string> VpnHosts { get; } = new();
         
     }

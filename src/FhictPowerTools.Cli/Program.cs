@@ -1,7 +1,10 @@
 ﻿using System;
-using FhictPowerTools.Core.FhictFtp;
-using FhictPowerTools.Core.FhictVpn;
+using System.Collections.Generic;
+using FhictPowerTools.Cli.Commands;
+using FhictPowerTools.Cli.Settings;
+using FhictPowerTools.Core.FtpClient;
 using FhictPowerTools.Core.Repositories;
+using FhictPowerTools.Core.VpnClient;
 using FhictPowerTools.Infrastructure.DataStores;
 using FhictPowerTools.Infrastructure.FhictFtp;
 using FhictPowerTools.Infrastructure.FhictVpn;
@@ -10,36 +13,35 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Spectre.Console.Cli;
 
 namespace FhictPowerTools.Cli
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
-            IConfigurationRoot configurationRoot = CreateConfigurationBuilder().Build();
-            ServiceProvider serviceProvider = CreateServiceCollection(configurationRoot).BuildServiceProvider();
+            CreateConfigurationBuilder().Build();
             ConfigureJsonSerializerSettings();
-            IUserDataStore userDataStore = serviceProvider.GetService<IUserDataStore>() ?? throw new NullReferenceException();
-            userDataStore.Delete();
-            if (!userDataStore.Exists()) userDataStore.Create();
-            IUserRepository userRepository =
-                serviceProvider.GetService<IUserRepository>() ?? throw new NullReferenceException();
-            userRepository.SetPassword("sultry-overhung-pox4-nimble");
-            Console.WriteLine(userRepository.GetPassword());
-            userRepository.SetUsername("I453297");
-            IVpnHostRepository vpnHostRepository = serviceProvider.GetService<IVpnHostRepository>() ?? throw new NullReferenceException();
-            vpnHostRepository.AddHost("vdi.fhict.nl");
-            vpnHostRepository.AddHost("seclab.fhict.nl");
-            IFhictVpn fhictVpn = serviceProvider.GetService<IFhictVpn>() ?? 
-                                               throw new NullReferenceException(
-                                                   "Could not find {nameof(IFhictVpn)}");
-            fhictVpn.Connect("vdi.fhict.nl");
-            Console.WriteLine($"Is VPN connected? {fhictVpn.IsConnected()}");
-            fhictVpn.Disconnect();
-            Console.WriteLine($"Is VPN connected? {fhictVpn.IsConnected()}");
-            IFhictFtp fhictFtp = serviceProvider.GetService<IFhictFtp>() ?? throw new NullReferenceException();
-            fhictFtp.RemoveRemoteFiles();
+            IServiceCollection serviceCollection = CreateServiceCollection();
+            return SpectreCliApp(serviceCollection, args);
+        }
+
+        private static int SpectreCliApp(IServiceCollection serviceCollection, IEnumerable<string> args)
+        {
+            TypeRegistrar registrar = new(serviceCollection);
+            CommandApp app = new(registrar);
+
+            app.Configure(config =>
+            {
+                config.AddBranch<CredentialsSettings>("credentials", credentials =>
+                {
+                    credentials.AddCommand<CredentialsSaveCommand>("save");
+                    credentials.AddCommand<CredentialsDeleteCommand>("delete");
+                    credentials.AddCommand<CredentialsVerifyCommand>("verify");
+                });
+            });
+            return app.Run(args);
         }
 
         private static void ConfigureJsonSerializerSettings()
@@ -65,15 +67,15 @@ namespace FhictPowerTools.Cli
             return configurationBuilder;
         }
         
-        private static IServiceCollection CreateServiceCollection(IConfiguration configurationRoot)
+        private static IServiceCollection CreateServiceCollection()
         {
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddOptions()
-                .AddScoped<IFhictVpn, FhictVpn>()
-                .AddScoped<IUserDataStore, UserDataStore>()
-                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IVpnClient, VpnClient>()
+                .AddScoped<ICredentialsDataStore, CredentialsDataStore>()
+                .AddScoped<ICredentialsRepository, CredentialsRepository>()
                 .AddScoped<IVpnHostRepository, VpnHostRepository>()
-                .AddScoped<IFhictFtp, FhictFtp>();
+                .AddScoped<IFtpClient, FtpClient>();
             serviceCollection.AddDataProtection();
                 
             return serviceCollection;

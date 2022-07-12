@@ -1,6 +1,6 @@
-﻿namespace FhictPowerTools.Core.FhictVpn
+﻿namespace FhictPowerTools.Core.VpnClient
 {
-    public interface IFhictVpn
+    public interface IVpnClient
     {
         void Connect(string host);
         void Disconnect();

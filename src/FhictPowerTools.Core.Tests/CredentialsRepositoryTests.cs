@@ -10,7 +10,7 @@ namespace FhictPowerTools.Core.Tests
 
         public CredentialsRepositoryTests()
         {
-            _credentialsRepository = new CredentialsRepositoryStub();
+            _credentialsRepository = new CredentialsRepositoryMock();
         }
         [Fact]
         public void ShouldSetPassword()

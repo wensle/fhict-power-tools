@@ -9,7 +9,8 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
         <PackageReference Include="Moq" Version="4.16.1" />
-        <PackageReference Include="Spectre.Console" Version="0.39.0" />
+        <PackageReference Include="Spectre.Console" Version="0.41.0" />
+        <PackageReference Include="Spectre.Console.Testing" Version="0.41.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,10 +26,6 @@
       <ProjectReference Include="..\..\src\FhictPowerTools.Cli\FhictPowerTools.Cli.csproj" />
       <ProjectReference Include="..\..\src\FhictPowerTools.Core\FhictPowerTools.Core.csproj" />
       <ProjectReference Include="..\..\src\FhictPowerTools.FakeImplementations\FhictPowerTools.FakeImplementations.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="FakeImplementations" />
     </ItemGroup>
 
 </Project>
